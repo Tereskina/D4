@@ -1,37 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<title>My library</title>
 </head>
 <body>
-	<p>Добро пожаловать в {{ title }}.</p>
+	<h1>Добро пожаловать в {{ title }}.</h1>
 	<br>
 	<!-- <p>Тут собрано {{ books_count }} книг из моей личной коллекции.</p> -->
-	<p>Тут собрано {{ books|length }} книг из моей личной коллекции.</p>
-	<table border="1">
-    {% for book in books %}
-	    <tr>
-	    	<td>{{ forloop.counter }}</td>
-	        <td>{{ book.title }}</td>
-	        <td>{{ book.ISBN }}</td>
-	        <td>{{ book.description }}</td>
-	        <td>{{ book.year_release }}</td>
-	        <td>{{ book.author.full_name }}</td>
-	        <td>{{ book.author.country }}</td>
-	        <td>{{ book.copy_count }}</td>
-	        <td>
-                <form action="/index/book_increment/" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="hidden" name="id" value="{{book.id}}" />
-                    <input type="submit" value="Увеличить кол-во" />
-                </form>
-                <form action="/index/book_decrement/" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="hidden" name="id" value="{{book.id}}" />
-                    <input type="submit" value="Уменьшить кол-во" />
-                </form>
-            </td>
-	    </tr>
+	<h2>Тут собрано {{ books|length }} книг из моей личной коллекции.</h2>
+	<table border="1" class="table table-striped">
+    	<thead>
+    		<tr class="bg-warning">
+      			<th scope="col">#</th>
+      			<th scope="col">Title</th>
+      			<th scope="col">ISNB</th>
+      			<th scope="col">Description</th>
+      			<th scope="col">Year release</th>
+      			<th scope="col">Author</th>
+      			<th scope="col">Country</th>
+      			<th scope="col">Copy count</th>
+      			<th scope="col">Change count</th>
+    		</tr>
+  		</thead>
+  		{% for book in books %}
+  		<tbody>
+		    <tr>
+		    	<td class="font-weight-bold">{{ forloop.counter }}</td>
+		        <td class="font-weight-bold">{{ book.title }}</td>
+		        <td>{{ book.ISBN }}</td>
+		        <td>{{ book.description }}</td>
+		        <td>{{ book.year_release }}</td>
+		        <td>{{ book.author.full_name }}</td>
+		        <td>{{ book.author.country }}</td>
+		        <td>{{ book.copy_count }}</td>
+		        <td>
+	                <form action="/index/book_increment/" method="post" enctype="multipart/form-data">
+	                    {% csrf_token %}
+	                    <input type="hidden" name="id" value="{{book.id}}" />
+	                    <button class="btn btn-outline-success btn-sm btn-block my-1" type="submit">Увеличить кол-во</button>
+	                </form>
+	                <form action="/index/book_decrement/" method="post" enctype="multipart/form-data">
+	                    {% csrf_token %}
+	                    <input type="hidden" name="id" value="{{book.id}}" />
+	                    <button class="btn btn-outline-danger btn-sm btn-block my-1" type="submit">Уменьшить кол-во</button>
+	                </form>
+	            </td>
+		    </tr>
+		</tbody>
 	    {% endfor %}
 	</table>
 	<p>
